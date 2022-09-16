@@ -5,35 +5,13 @@ import ProductCard from "./ProductCard";
 import "./NewProducts.css";
 import CartContext from "../../context/CartContext";
 
-const standardProducts = [
-  {
-    name: "Coca Cola",
-    id: 1,
-    price: 3.5,
-    quantity: 3,
-  },
-  {
-    name: "Pampers",
-    id: 2,
-    price: 5,
-    quantity: 10,
-  },
-  {
-    name: "Milka",
-    id: 3,
-    price: 3,
-    quantity: 20,
-  },
-];
-
 function NewProducts(props) {
-  const { increment } = useContext(CartContext);
+  const { increment, addProductInCart, products, setProducts } = useContext(CartContext); //destructuring
 
   const [price, setPrice] = useState();
   const [quantity, setQuantity] = useState();
-  const [products, setProducts] = useState(standardProducts);
   const [text, setText] = useState("");
-  let [newId, setNewId] = useState(standardProducts.length + 1);
+  let [newId, setNewId] = useState(products.length + 1);
   const addProduct = () => {
     const newProducts = [...products];
     newProducts.push({
@@ -47,7 +25,6 @@ function NewProducts(props) {
     setProducts(newProducts);
     setText("");
     setNewId(newId + 1);
-    console.log(newId);
   };
   const changeText = (event) => {
     setText(event.target.value);
@@ -58,7 +35,16 @@ function NewProducts(props) {
   };
   const addProductToCart = (id) => {
     const foundProduct = products.find((element) => element.id === id);
+
+    for (const product of products) {
+      if (product.id === id) {
+        product.quantity--;
+      }
+    }
+    setProducts(products);
+
     increment();
+    addProductInCart(foundProduct);
   };
 
   const changePrice = (event) => {
