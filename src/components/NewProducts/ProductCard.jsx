@@ -1,7 +1,6 @@
 import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-// import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -28,14 +27,14 @@ const ProductCard = ({
               {price}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {quantity}
+              {quantity} stock
             </Typography>
           </CardContent>
         </CardActionArea>
         <IconButton onClick={() => clearProduct(id)}>
           <ClearIcon></ClearIcon>
         </IconButton>
-        <IconButton onClick={() => addProductToCart(id)}>
+        <IconButton onClick={() => addProductToCart(id)} disabled = {quantity <= 0}>
           <AddShoppingCartIcon />
         </IconButton>
       </Card>

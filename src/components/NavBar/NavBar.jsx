@@ -13,7 +13,6 @@ function NavBar() {
   const location = useLocation();
 
   const { count } = useContext(CartContext);
-  console.log(count);
 
   return (
     <Box sx={{ flexGrow: 1 }}>

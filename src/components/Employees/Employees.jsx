@@ -11,7 +11,6 @@ function Employees(props) {
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((response) => response.json())
-      // .then((json) => console.log(json));+
       .then((json) => {
         let users = json.map((user) => {
           return {
@@ -62,4 +61,3 @@ function Employees(props) {
 }
 
 export default Employees;
-// id,name,email,company
