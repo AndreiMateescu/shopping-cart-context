@@ -24,9 +24,9 @@ const button = {
 
 const EmployeeModal = (props) => {
     const handleClose = () => {
-        props.setOpen(false);
+        props.setOpen(false); //functional component, useEffect
+        // props.closeModal(); //class component
     }
-    console.log(props.data);
     return <Modal
         open={props.open}
         aria-labelledby="modal-modal-title"

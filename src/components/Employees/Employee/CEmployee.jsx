@@ -1,18 +1,23 @@
-import React, {useState} from 'react'
+import React from "react";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
-import EmployeeModal from '../Modals/EmployeeModal';
+import EmployeeModal from '../../Modals/EmployeeModal';
 
-const Employee = ({ id, name, email, company }) => {
-    const [open, setOpen] = useState(false);
-    const [data, setData] = useState({});
+class CEmployee extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+            data: {}
+        };
+    }
 
-    const detailsHandler = async() => {
+    async detailsHandler() {
         try {
-            const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
+            const response = await fetch(`https://jsonplaceholder.typicode.com/users/${this.props.id}`);
             if (!response.ok) {
                 throw new Error("Something went wrong");
             }
@@ -25,39 +30,42 @@ const Employee = ({ id, name, email, company }) => {
                 city: data.address.city
             };
 
-            setData(information);
-            setOpen(true);
+            this.setState({ data: information, open: true });
         } catch (error) {
             console.log(error);
         }
     }
+    
+    closeModal() { //value = false
+        this.setState({ open: false });
+    }
 
-    return (
-        <>
-        <EmployeeModal open={open} setOpen={setOpen} data={data}/>
-        <Card sx={{ height: 400, width: 200, border: 0, boxShadow: 0 }} onClick={detailsHandler}>
+    render() {
+        return (<>
+        <EmployeeModal open={this.state.open} data={this.state.data} closeModal={() => this.closeModal()}/>
+        <Card sx={{ height: 400, width: 200, border: 0, boxShadow: 0 }} onClick={() => this.detailsHandler()}>
             <CardActionArea>
                 <CardMedia
                     component="img"
                     height="140"
-                    image={`https://robohash.org/${id}?200x200`}
+                    image={`https://robohash.org/${this.props.id}?200x200`}
                     alt="green iguana"
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                        {name}
+                        {this.props.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {email}
+                        {this.props.email}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {company}
+                        {this.props.company}
                     </Typography>
                 </CardContent>
             </CardActionArea>
         </Card>
-        </>
-    );
+        </>)
+    }
 }
 
-export default Employee;
+export default CEmployee;

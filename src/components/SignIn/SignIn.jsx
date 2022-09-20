@@ -59,8 +59,6 @@ const SignIn = () => {
 
     }
 
-    console.log(user);
-
     return user.email && user.password ? <h1>You are loged in</h1 > :
         <div>
             <h1>Sign In</h1>

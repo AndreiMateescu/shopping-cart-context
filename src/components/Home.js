@@ -3,7 +3,6 @@ import NavBar from "./NavBar/NavBar";
 // import '../App.css';
 
 const Home = ({ user }) => {
-  console.log(user);
   return (
     <div>
       <NavBar />

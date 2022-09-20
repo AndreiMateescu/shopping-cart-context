@@ -1,5 +1,6 @@
 // import React from "react";
 import { useState, useEffect } from "react";
+import CEmployees from "./components/Employees/CEmployees";
 import Employees from "./components/Employees/Employees";
 import NewProducts from "./components/NewProducts/NewProducts";
 import SignInGoogle from "./components/SignIn/SignInGoogle";
