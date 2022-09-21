@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import ProductCard from "./ProductCard";
 import "./NewProducts.css";
 import CartContext from "../../context/CartContext";
+import { useEffect } from "react";
 
 function NewProducts(props) {
   const { increment, addProductInCart, products, setProducts } = useContext(CartContext); //destructuring
@@ -11,27 +12,49 @@ function NewProducts(props) {
   const [price, setPrice] = useState();
   const [quantity, setQuantity] = useState();
   const [text, setText] = useState("");
-  let [newId, setNewId] = useState(products.length + 1);
+  
   const addProduct = () => {
-    const newProducts = [...products];
-    newProducts.push({
-      name: text,
-      id: newId,
-      price: price,
-      quantity: quantity,
-    });
+
+    fetch("https://localhost:7278/Products", {
+      method: "POST",
+      body: JSON.stringify({
+        name: text,
+        price: price,
+        quantity: quantity,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+      },
+    })
+    .then((response) => response.json())
+    .then((newProducts) => setProducts(newProducts));
+
     setQuantity("");
     setPrice("");
-    setProducts(newProducts);
     setText("");
-    setNewId(newId + 1);
   };
+
+  useEffect(() => {
+
+    async function fetchData() {
+      const response = await fetch("https://localhost:7278/Products");
+      const data = await response.json();
+      setProducts(data);
+    }
+
+    fetchData();
+  }, []);
+
   const changeText = (event) => {
     setText(event.target.value);
   };
   const clearProduct = (id) => {
-    const newList = products.filter((item) => item.id !== id);
-    setProducts(newList);
+    fetch(`https://localhost:7278/Products/${id}`, {
+      method: "DELETE"
+    })
+    .then((response) => response.json())
+    .then((newProducts) => setProducts(newProducts));
   };
   const addProductToCart = (id) => {
     const foundProduct = products.find((element) => element.id === id);

@@ -2,31 +2,31 @@ import { createContext, useState } from "react";
 
 const CartContext = createContext();
 
-const standardProducts = [
-  {
-    name: "Coca Cola",
-    id: 1,
-    price: 3.5,
-    quantity: 3,
-  },
-  {
-    name: "Pampers",
-    id: 2,
-    price: 5,
-    quantity: 10,
-  },
-  {
-    name: "Milka",
-    id: 3,
-    price: 3,
-    quantity: 20,
-  },
-];
+// const standardProducts = [
+//   {
+//     name: "Coca Cola",
+//     id: 1,
+//     price: 3.5,
+//     quantity: 3,
+//   },
+//   {
+//     name: "Pampers",
+//     id: 2,
+//     price: 5,
+//     quantity: 10,
+//   },
+//   {
+//     name: "Milka",
+//     id: 3,
+//     price: 3,
+//     quantity: 20,
+//   },
+// ];
 
 export const CartProvider = ({ children }) => {
   const [count, setCount] = useState(0);
   const [shoppingCartProducts, setShoppingCartProducts] = useState([]);
-  const [products, setProducts] = useState(standardProducts);
+  const [products, setProducts] = useState([]);
 
   const increment = () => {
     let newCount = count + 1;
