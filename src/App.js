@@ -11,7 +11,8 @@ import { Navigate } from "react-router";
 import ShoppingCart from "./components/ShoppingCart/ShoppingCart";
 import NoPage from "./components/NoPage/NoPage";
 import NavBar from "./components/NavBar/NavBar";
-import { CartProvider } from "./context/CartContext";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -23,7 +24,7 @@ function App() {
   }, []);
 
   return (
-    <CartProvider>
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route
@@ -100,7 +101,7 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
-    </CartProvider>
+    </Provider>
   );
 }
 

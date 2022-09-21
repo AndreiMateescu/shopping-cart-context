@@ -1,58 +1,89 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import ProductCard from "./ProductCard";
 import "./NewProducts.css";
-import CartContext from "../../context/CartContext";
+import { connect, useDispatch } from 'react-redux';
 
 function NewProducts(props) {
-  const { increment, addProductInCart, products, setProducts } = useContext(CartContext); //destructuring
-
   const [price, setPrice] = useState();
   const [quantity, setQuantity] = useState();
   const [text, setText] = useState("");
-  let [newId, setNewId] = useState(products.length + 1);
+
+  const increment = () => {
+    let newCount = props.count + 1;
+    dispatch({ type: "SET_COUNT", content: newCount });
+  };
+
+  const addProductInCart = (product) => {
+    const foundProduct = props.shoppingCartProducts.find(
+      (item) => item.id === product.id
+    );
+
+    const shoppingCartProductsCopy = [...props.shoppingCartProducts];  
+
+    if (foundProduct) {
+      for (const item of shoppingCartProductsCopy) {
+        if (item.id === foundProduct.id) {
+          item.count = item.count + 1;
+        }
+      }
+      dispatch({type: "SET_SHOPPING_CART_PRODUCTS", content: shoppingCartProductsCopy});
+    } else {
+      product.count = 1;
+      dispatch({type: "SET_SHOPPING_CART_PRODUCTS", content: [...props.shoppingCartProducts, product]});
+    }
+  };
+  
+  let [newId, setNewId] = useState(props.products.length + 1);
+  
+
+  const dispatch = useDispatch();
+
   const addProduct = () => {
-    const newProducts = [...products];
+    const newProducts = [...props.products];
     newProducts.push({
       name: text,
       id: newId,
       price: price,
       quantity: quantity,
     });
+
+    dispatch({ type: "SET_PRODUCTS", content: newProducts });
+
+    setText("");
     setQuantity("");
     setPrice("");
-    setProducts(newProducts);
-    setText("");
     setNewId(newId + 1);
   };
   const changeText = (event) => {
     setText(event.target.value);
   };
   const clearProduct = (id) => {
-    const newList = products.filter((item) => item.id !== id);
-    setProducts(newList);
+    const newList = props.products.filter((item) => item.id !== id);
+    dispatch({ type: "SET_PRODUCTS", content: newList });
   };
   const addProductToCart = (id) => {
-    const foundProduct = products.find((element) => element.id === id);
+    const foundProduct = props.products.find((element) => element.id === id);
 
-    for (const product of products) {
+    const productsCopy = [...props.products];
+
+    for (const product of productsCopy) {
       if (product.id === id) {
         product.quantity--;
       }
     }
-    setProducts(products);
 
     increment();
     addProductInCart(foundProduct);
   };
 
   const changePrice = (event) => {
-    setPrice(event.target.value);
+    setPrice(+event.target.value);
   };
 
   const changeQuantity = (event) => {
-    setQuantity(event.target.value);
+    setQuantity(+event.target.value);
   };
   const isButtonDisable = () => {
     return !(price && quantity && text);
@@ -118,7 +149,7 @@ function NewProducts(props) {
 
       <br />
       <ul>
-        {products.map((product) => (
+        {props.products.map((product) => (
           <ProductCard
             key={product.id}
             id={product.id}
@@ -134,4 +165,13 @@ function NewProducts(props) {
     </div>
   );
 }
-export default NewProducts;
+
+const mapStateToProps = function(store) {
+  return {
+    count: store.count,
+    shoppingCartProducts: store.shoppingCartProducts,
+    products: store.products
+  }
+}
+
+export default connect(mapStateToProps)(NewProducts);

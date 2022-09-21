@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -6,13 +6,11 @@ import { useNavigate, useLocation } from "react-router";
 import Button from "@mui/material/Button";
 import { auth } from "../../service/firebase";
 import "./NavBar.css";
-import CartContext from "../../context/CartContext";
+import { connect } from "react-redux";
 
-function NavBar() {
+function NavBar(props) {
   let navigate = useNavigate();
   const location = useLocation();
-
-  const { count } = useContext(CartContext);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -66,7 +64,7 @@ function NavBar() {
                 navigate("/ShoppingCart");
               }}
             >
-              Shopping Cart {count}
+              Shopping Cart {props.count}
             </Button>
           </div>
           <Button id="signOutBtn" onClick={() => auth.signOut()}>
@@ -78,4 +76,10 @@ function NavBar() {
   );
 }
 
-export default NavBar;
+const mapStateToProps = (store) => {
+  return {
+    count: store.count,
+  }
+}
+
+export default connect(mapStateToProps)(NavBar);
